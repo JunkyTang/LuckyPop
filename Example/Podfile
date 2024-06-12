@@ -1,0 +1,15 @@
+use_frameworks!
+
+platform :ios, '13.0'
+
+pod "SnapKit"
+
+target 'LuckyPop_Example' do
+  pod 'LuckyPop', :path => '../'
+
+  target 'LuckyPop_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
