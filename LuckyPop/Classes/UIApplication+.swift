@@ -9,7 +9,7 @@ import Foundation
 
 extension UIApplication {
     
-    var currentWindow: UIWindow? {
+    public var currentWindow: UIWindow? {
         guard let delegate = UIApplication.shared.delegate,
               let window = delegate.window,
               let window = window
@@ -17,7 +17,7 @@ extension UIApplication {
         return window
     }
     
-    var safeAreaInset: UIEdgeInsets {
+    public var safeAreaInset: UIEdgeInsets {
         guard let window = currentWindow else { return .zero }
         return window.safeAreaInsets
     }

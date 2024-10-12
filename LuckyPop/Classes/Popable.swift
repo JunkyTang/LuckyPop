@@ -15,14 +15,9 @@ public protocol Popable: UIView {
     
     var needMask: Bool { get }
     
-    var durationForShow: TimeInterval { get }
+    func shouldShow(spView: UIView, compelete: @escaping () -> Void)
     
-    var durationForHide: TimeInterval { get }
-    
-    func showAnimation(spView: UIView)
-    
-    func hideAnimation(spView: UIView, compelete:@escaping () -> Void)
-    
+    func shouldHide(spView: UIView,compelete: @escaping () -> Void)
 }
 
 public extension Popable {
@@ -36,13 +31,9 @@ public extension Popable {
         return true
     }
     
-    var durationForShow: TimeInterval {
-        return 0.2
-    }
+    func shouldShow(spView: UIView, compelete: @escaping () -> Void) { compelete() }
     
-    var durationForHide: TimeInterval {
-        return 0.2
-    }
+    func shouldHide(spView: UIView,compelete: @escaping () -> Void) { compelete() }
     
 }
 
@@ -76,12 +67,14 @@ public extension Popable {
         }
         
         view.addSubview(self)
-        showAnimation(spView: view)
+        shouldShow(spView: view) {
+            
+        }
     }
     
     func hide(_ compelete:(() -> Void)? = nil) {
         guard let spView = superview else { return }
-        hideAnimation(spView: spView) {
+        shouldHide(spView: spView) {
             if let msk = spView as? MaskView {
                 msk.removeFromSuperview()
             }else{

@@ -22,8 +22,13 @@ class TestView: UIView {
         }
         return TestView()
     }
-
+    
+    
+    override var safeAreaInsets: UIEdgeInsets {
+        return UIApplication.shared.safeAreaInset
+    }
+    
 }
 
-extension TestView: AlertPopable {}
+extension TestView: SheetPopable {}
 

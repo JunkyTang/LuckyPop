@@ -8,49 +8,19 @@
 import Foundation
 import SnapKit
 
-public protocol AlertPopable: Popable {
-    var hLayout: Layout { get }
-    
-    var vLayout: Layout { get }
-}
+public protocol AlertPopable: Popable {}
 
-public extension AlertPopable {
+extension AlertPopable {
     
-    var hLayout: Layout {
-        return .margin(-80)
-    }
-    
-    var vLayout: Layout {
-        return .fit
-    }
-    
-    
-    func showAnimation(spView: UIView) {
+    public func shouldShow(spView: UIView, compelete: @escaping () -> Void) {
         
+        let width = min(UIScreen.main.bounds.size.width - 80, 390)
         snp.makeConstraints { make in
-            
-            switch hLayout {
-            case .fix(let cGFloat):
-                make.width.equalTo(cGFloat)
-            case .margin(let cGFloat):
-                make.width.equalTo(spView).offset(cGFloat)
-            case .fit:
-                break
-            }
-            
-            switch vLayout {
-            case .fix(let cGFloat):
-                make.height.equalTo(cGFloat)
-            case .margin(let cGFloat):
-                make.height.equalTo(spView).offset(cGFloat)
-            case .fit:
-                break
-            }
-            make.center.equalTo(spView)
+            make.centerY.equalTo(spView).offset(-30)
+            make.centerX.equalTo(spView)
+            make.width.equalTo(width)
         }
-    }
-    
-    func hideAnimation(spView: UIView, compelete: @escaping () -> Void) {
         compelete()
     }
+    
 }

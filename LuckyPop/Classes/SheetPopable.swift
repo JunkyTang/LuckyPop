@@ -9,67 +9,38 @@ import Foundation
 import SnapKit
 
 
-public protocol SheetPopable: Popable {
-    
-    var hLayout: Layout { get }
-    
-    var vLayout: Layout { get }
-}
+public protocol SheetPopable: Popable {}
 
-public extension SheetPopable {
+extension SheetPopable {
     
-    
-    var hLayout: Layout {
-        return .margin(0)
-    }
-    
-    var vLayout: Layout {
-        return .fit
-    }
-    
-    
-    func showAnimation(spView: UIView) {
-        
+
+    public func shouldShow(spView: UIView, compelete: @escaping () -> Void) {
         snp.makeConstraints { make in
-            
-            switch hLayout {
-            case .fix(let cGFloat):
-                make.width.equalTo(cGFloat)
-            case .margin(let cGFloat):
-                make.width.equalTo(spView).offset(cGFloat)
-            case .fit:
-                break
-            }
-            
-            switch vLayout {
-            case .fix(let cGFloat):
-                make.height.equalTo(cGFloat)
-            case .margin(let cGFloat):
-                make.height.equalTo(spView).offset(cGFloat)
-            case .fit:
-                break
-            }
             make.top.equalTo(spView.snp.bottom)
-            make.centerX.equalTo(spView)
+            make.width.equalTo(spView)
         }
         
         spView.layoutIfNeeded()
         
         let height = bounds.size.height
-        UIView.animate(withDuration: durationForShow) {
+        UIView.animate(withDuration: 0.5) {
             self.transform = CGAffineTransformMakeTranslation(0, -height)
-        }
-    }
-    
-    func hideAnimation(spView: UIView, compelete: @escaping () -> Void) {
-        
-        UIView.animate(withDuration: durationForHide) {
-            self.transform = .identity
-        } completion: { finish in
+        } completion: { _ in
             compelete()
         }
 
     }
+    
+    public func shouldHide(spView: UIView, compelete: @escaping () -> Void) {
+        
+        UIView.animate(withDuration: 0.5) {
+            self.transform = .identity
+        } completion: { _ in
+            compelete()
+        }
+
+    }
+    
     
 }
 
