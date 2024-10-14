@@ -27,11 +27,12 @@ extension SheetPopable {
         spView.layoutIfNeeded()
         
         let height = bounds.size.height
-        UIView.animate(withDuration: animationIntervel) {
+        UIView.animate(withDuration: animationIntervel, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5) {
             self.transform = CGAffineTransformMakeTranslation(0, -height)
         } completion: { _ in
             compelete()
         }
+
 
     }
     
@@ -66,7 +67,7 @@ extension FixedHeightSheetPopable {
         spView.layoutIfNeeded()
         
         let height = bounds.size.height
-        UIView.animate(withDuration: animationIntervel) {
+        UIView.animate(withDuration: animationIntervel, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5) {
             self.transform = CGAffineTransformMakeTranslation(0, -height)
         } completion: { _ in
             compelete()
