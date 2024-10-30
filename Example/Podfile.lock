@@ -1,5 +1,5 @@
 PODS:
-  - LuckyPop (2.0.0):
+  - LuckyPop (2.1.0):
     - SnapKit
   - SnapKit (5.7.1)
 
@@ -16,7 +16,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  LuckyPop: b038e75c0990d7af3f46f2df1dcb8f3aea621602
+  LuckyPop: 463eab7e2a81bd68f464f41dc3f23fd3c8970f68
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
 
 PODFILE CHECKSUM: 0fd1f4fd0ef89f2852dc0ba65ea6bd272fe6445f

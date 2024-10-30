@@ -9,71 +9,33 @@ import Foundation
 import SnapKit
 
 
-public protocol SheetPopable: Popable {
-    
-    var animationIntervel: TimeInterval { get }
-}
+public protocol SheetPopable: Popable {}
 
-extension SheetPopable {
+public extension SheetPopable {
     
-    public var animationIntervel: TimeInterval { return 0.2 }
-    
-    public func shouldShow(spView: UIView, compelete: @escaping () -> Void) {
+    func popViewWillShow(in spView: UIView) {
         snp.makeConstraints { make in
+            make.left.right.equalTo(spView)
             make.top.equalTo(spView.snp.bottom)
-            make.width.equalTo(spView)
         }
+    }
+    
+    func popViewDidShow(in spView: UIView, compelete: @escaping () -> Void) {
         
-        spView.layoutIfNeeded()
-        
-        let height = bounds.size.height
-        UIView.animate(withDuration: animationIntervel, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5) {
-            self.transform = CGAffineTransformMakeTranslation(0, -height)
+        UIView.animate(withDuration: 0.2) {
+            self.transform = CGAffineTransformMakeTranslation(0, -self.bounds.size.height)
         } completion: { _ in
             compelete()
         }
-
-
     }
     
-    public func shouldHide(spView: UIView, compelete: @escaping () -> Void) {
-        
-        UIView.animate(withDuration: animationIntervel) {
+    func popViewWillHide(in spView: UIView, compelete: @escaping () -> Void) {
+        UIView.animate(withDuration: 0.2) {
             self.transform = .identity
         } completion: { _ in
             compelete()
         }
-
     }
     
-    
 }
-
-
-public protocol FixedHeightSheetPopable: SheetPopable {
-    
-    var fixedHeight: CGFloat { get }
-}
-
-extension FixedHeightSheetPopable {
-    
-    public func shouldShow(spView: UIView, compelete: @escaping () -> Void) {
-        snp.makeConstraints { make in
-            make.top.equalTo(spView.snp.bottom)
-            make.width.equalTo(spView)
-            make.height.equalTo(fixedHeight)
-        }
-        
-        spView.layoutIfNeeded()
-        
-        let height = bounds.size.height
-        UIView.animate(withDuration: animationIntervel, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5) {
-            self.transform = CGAffineTransformMakeTranslation(0, -height)
-        } completion: { _ in
-            compelete()
-        }
-
-    }
-}
-
 

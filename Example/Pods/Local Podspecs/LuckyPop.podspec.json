@@ -1,6 +1,6 @@
 {
   "name": "LuckyPop",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "summary": "A short description of LuckyPop.",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/JunkyTang/LuckyPop",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/JunkyTang/LuckyPop.git",
-    "tag": "2.0.0"
+    "tag": "2.1.0"
   },
   "platforms": {
     "ios": "13.0"

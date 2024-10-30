@@ -24,7 +24,7 @@ class ViewController: UIViewController {
         super.touchesBegan(touches, with: event)
         
         let test = TestView.loadFromXib()
-        test.show()
+        test.showPopView(in: nil)
     }
 
 }

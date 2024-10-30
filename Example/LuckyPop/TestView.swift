@@ -10,8 +10,9 @@ import UIKit
 import LuckyPop
 import SnapKit
 
-class TestView: UIView {
-
+final class TestView: UIView {
+    
+    
     static func loadFromXib(_ xibName: String? = nil) -> TestView {
         
         let bundle = Bundle(for: TestView.self)
@@ -30,5 +31,6 @@ class TestView: UIView {
     
 }
 
-extension TestView: SheetPopable {}
-
+//extension TestView: AlertPopable {}
+//extension TestView: SheetPopable {}
+extension TestView: Popable {}

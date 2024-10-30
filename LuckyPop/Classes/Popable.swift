@@ -8,79 +8,98 @@
 import UIKit
 
 
+public let popMaskViewTag: Int = Int.max - 100
+
 public protocol Popable: UIView {
     
+    var popMaskView: UIView? { get }
     
-    var hideWhendTapMask: Bool { get }
+    func popViewWillShow(in spView: UIView)
     
-    var needMask: Bool { get }
+    func popViewDidShow(in spView: UIView, compelete:@escaping () -> Void)
+
+    func popViewWillHide(in spView: UIView, compelete:@escaping () -> Void)
     
-    func shouldShow(spView: UIView, compelete: @escaping () -> Void)
+    func popViewDidHide(in spView: UIView)
     
-    func shouldHide(spView: UIView,compelete: @escaping () -> Void)
+    func showPopView(in view: UIView?)
+    
+    func hide(compelete:((Self) -> Void)?)
 }
 
 public extension Popable {
     
     
-    var hideWhendTapMask: Bool {
-        return true
-    }
     
-    var needMask: Bool {
-        return true
-    }
-    
-    func shouldShow(spView: UIView, compelete: @escaping () -> Void) { compelete() }
-    
-    func shouldHide(spView: UIView,compelete: @escaping () -> Void) { compelete() }
-    
-}
-
-
-public extension Popable {
-    
-    
-    var maskView: UIButton {
-        let mask = MaskView(frame: .zero)
-        mask.backgroundColor = UIColor(white: 0, alpha: 0.5)
-        mask.didClickSubject = { [weak self] in
-            guard let weakSelf = self else { return }
-            if !weakSelf.hideWhendTapMask {
-                return
-            }
-            weakSelf.hide()
+    var popMaskView: UIView? {
+        let mask = PopMaskView()
+        mask.funcForClick = { [weak self] in
+            guard let weakself = self else { return }
+            weakself.hide(compelete: nil)
         }
         return mask
     }
     
-    func show(_ inView: UIView? = nil) {
-        
-        let supView = inView ?? UIApplication.shared.currentWindow
-        guard var view = supView else { return }
-        
-        if needMask {
-            let msk = maskView
-            view.addSubview(msk)
-            msk.frame = view.bounds
-            view = msk
-        }
-        
-        view.addSubview(self)
-        shouldShow(spView: view) {
-            
+    func popViewWillShow(in spView: UIView) {
+        snp.makeConstraints { make in
+            make.left.top.width.equalTo(spView)
         }
     }
     
-    func hide(_ compelete:(() -> Void)? = nil) {
-        guard let spView = superview else { return }
-        shouldHide(spView: spView) {
-            if let msk = spView as? MaskView {
-                msk.removeFromSuperview()
-            }else{
-                spView.removeFromSuperview()
+    func popViewDidShow(in spView: UIView, compelete:@escaping () -> Void) { compelete() }
+
+    func popViewWillHide(in spView: UIView, compelete:@escaping () -> Void) { compelete() }
+    
+    func popViewDidHide(in spView: UIView) {}
+    
+    
+    func showPopView(in view: UIView?) {
+        
+        var container: UIView = UIView()
+        if view == nil {
+            if let window = UIApplication.shared.delegate?.window,
+               let window = window
+            {
+                container = window
             }
-            compelete?()
+        }else{
+            container = view!
         }
+        
+        if let mask = popMaskView {
+            mask.tag = popMaskViewTag
+            container.addSubview(mask)
+            mask.snp.makeConstraints { make in
+                make.edges.equalTo(0)
+            }
+            container = mask
+        }
+        
+        container.addSubview(self)
+        popViewWillShow(in: container)
+        container.layoutIfNeeded()
+        popViewDidShow(in: container) {
+            
+        }
+        
     }
+    
+    func hide(compelete:((Self) -> Void)?) {
+        
+        guard let spView = superview else {
+            compelete?(self)
+            return
+        }
+        popViewWillHide(in: spView) { [weak self] in
+            guard let weakself = self else { return }
+            weakself.removeFromSuperview()
+            if let mask = spView.viewWithTag(popMaskViewTag) {
+                mask.removeFromSuperview()
+            }
+            compelete?(weakself)
+            weakself.popViewDidHide(in: spView)
+        }
+        
+    }
+    
 }
